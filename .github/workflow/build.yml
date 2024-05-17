@@ -1,0 +1,44 @@
+name: Build and Release
+
+on:
+    push:
+        tags: # Trigger on pushing tags
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                os: [darwin, linux, windows]
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Setup Go
+              uses: actions/setup-go@v2
+              with:
+                  go-version: 1.19.x # Update with desired Go version
+
+            - name: Build for ${{ matrix.os }}
+              run: |
+                  GOOS=${{ matrix.os }}
+                  GOARCH=amd64
+                  go build -o goportscan ./cmd/goportscan
+
+            - name: Create archive for ${{ matrix.os }}
+              run: |
+                  os=${{ matrix.os }}
+                  arch=amd64  # Assuming amd64 architecture for all OSes
+                  mkdir -p "goportscan-${os}-${arch}"/src
+                  mv goportscan "goportscan-${os}-${arch}"/src
+                  cd "goportscan-${os}-${arch}"
+                  zip -r ../goportscan-${os}-${arch}.zip .
+                  cd ../
+
+            - name: Upload Release Assets
+              uses: softprops/action-gh-release@v1
+              with:
+                  tag_name: ${{ github.ref }}
+                  name: ${{ matrix.os }} Build
+                  file: goportscan-${{ matrix.os }}-amd64.zip # Explicitly mention arch
+                  draft: false
+                  prerelease: false

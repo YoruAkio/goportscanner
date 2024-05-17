@@ -22,10 +22,10 @@ jobs:
 
             - name: Build and Archive
               run: |
-                  mkdir -p goportscan/portscan
+                  mkdir -p goportscan
                   GOOS=${{ matrix.os }}
                   GOARCH=${{ matrix.arch }}
-                  go build -o goportscan/portscan/goportscan *.go
+                  go build -o goportscan/goportscan *.go
                   os=${{ matrix.os }}
                   arch=${{ matrix.arch }}
                   zip -r goportscan-${os}-${arch}.zip goportscan

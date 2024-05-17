@@ -2,7 +2,7 @@ name: Build and Release
 
 on:
     push:
-        tags: # Trigger on pushing tags
+        tags: v*
 
 jobs:
     build:

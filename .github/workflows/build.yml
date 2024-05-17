@@ -46,7 +46,7 @@ jobs:
               uses: softprops/action-gh-release@v1
               with:
                   tag_name: ${{ steps.create_tag.outputs.tag_name }}
-                  name: ${{ matrix.os }} ${{ matrix.arch }} Build
+                  name: GoPortScan ${{ steps.create_tag.outputs.tag_name }}
                   files: goportscan-${{ matrix.os }}-${{ matrix.arch }}.zip
                   draft: false
                   prerelease: false

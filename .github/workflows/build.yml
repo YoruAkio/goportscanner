@@ -22,21 +22,22 @@ jobs:
 
             - name: Build and Archive
               run: |
-                  mkdir -p goportscan/src
-                  mv !(goportscan) goportscan/src
                   GOOS=${{ matrix.os }}
                   GOARCH=${{ matrix.arch }}
-                  go build -o goportscan/portscan goportscan/src/*.go
+                  go build -o goportscan/goportscan
                   os=${{ matrix.os }}
                   arch=${{ matrix.arch }}
-                  zip -r portscan-${os}-${arch}.zip goportscan
+                  mkdir -p portscan/src
+                  mv * portscan/src
+                  mv portscan/goportscan portscan/
+                  zip -r goportscan-${os}-${arch}.zip portscan
               shell: bash
 
             - name: Upload Artifacts
               uses: actions/upload-artifact@v2
               with:
-                  name: portscan-${{ matrix.os }}-${{ matrix.arch }}
-                  path: portscan-${{ matrix.os }}-${{ matrix.arch }}.zip
+                  name: goportscan-${{ matrix.os }}-${{ matrix.arch }}
+                  path: goportscan-${{ matrix.os }}-${{ matrix.arch }}.zip
 
         outputs:
             matrix: ${{ toJSON(matrix) }}
@@ -52,12 +53,12 @@ jobs:
 
             - name: Move Artifacts
               run: |
-                  mv portscan-darwin-386/portscan-darwin-386.zip .
-                  mv portscan-darwin-amd64/portscan-darwin-amd64.zip .
-                  mv portscan-linux-386/portscan-linux-386.zip .
-                  mv portscan-linux-amd64/portscan-linux-amd64.zip .
-                  mv portscan-windows-386/portscan-windows-386.zip .
-                  mv portscan-windows-amd64/portscan-windows-amd64.zip .
+                  mv goportscan-darwin-386/goportscan-darwin-386.zip .
+                  mv goportscan-darwin-amd64/goportscan-darwin-amd64.zip .
+                  mv goportscan-linux-386/goportscan-linux-386.zip .
+                  mv goportscan-linux-amd64/goportscan-linux-amd64.zip .
+                  mv goportscan-windows-386/goportscan-windows-386.zip .
+                  mv goportscan-windows-amd64/goportscan-windows-amd64.zip .
 
             - name: Create Tag
               id: create_tag
@@ -73,12 +74,12 @@ jobs:
                   tag_name: ${{ steps.create_tag.outputs.tag_name }}
                   name: GoPortScan Release
                   files: |
-                      portscan-darwin-386.zip
-                      portscan-darwin-amd64.zip
-                      portscan-linux-386.zip
-                      portscan-linux-amd64.zip
-                      portscan-windows-386.zip
-                      portscan-windows-amd64.zip
+                      goportscan-darwin-386.zip
+                      goportscan-darwin-amd64.zip
+                      goportscan-linux-386.zip
+                      goportscan-linux-amd64.zip
+                      goportscan-windows-386.zip
+                      goportscan-windows-amd64.zip
                   draft: false
                   prerelease: false
               env:

@@ -28,7 +28,8 @@ jobs:
                   os=${{ matrix.os }}
                   arch=${{ matrix.arch }}
                   mkdir -p goportscan/src
-                  mv goportscan/goportscan goportscan/src
+                  mv * goportscan/src
+                  mv goportscan/src/goportscan goportscan/
                   zip -r goportscan-${os}-${arch}.zip goportscan
               shell: bash
 

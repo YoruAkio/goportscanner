@@ -32,6 +32,12 @@ jobs:
                   zip -r goportscan-${os}-${arch}.zip goportscan
               shell: bash
 
+            - name: Upload Artifacts
+              uses: actions/upload-artifact@v2
+              with:
+                  name: goportscan-${{ matrix.os }}-${{ matrix.arch }}
+                  path: goportscan-${{ matrix.os }}-${{ matrix.arch }}.zip
+
         outputs:
             matrix: ${{ toJSON(matrix) }}
 
@@ -40,6 +46,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
+
+            - name: Download Artifacts
+              uses: actions/download-artifact@v2
 
             - name: Create Tag
               id: create_tag

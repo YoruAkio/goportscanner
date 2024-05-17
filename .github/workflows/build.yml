@@ -17,7 +17,7 @@ jobs:
             - name: Setup Go
               uses: actions/setup-go@v2
               with:
-                  go-version: 1.19.x # Update with desired Go version
+                  go-version: 1.22.3
 
             - name: Build for ${{ matrix.os }}
               run: |
@@ -33,17 +33,15 @@ jobs:
               run: |
                   os=${{ matrix.os }}
                   arch=amd64  # Assuming amd64 architecture for all OSes
-                  mkdir -p "goportscan-${os}-${arch}"/src
-                  mv goportscan "goportscan-${os}-${arch}"/src
-                  cd "goportscan-${os}-${arch}"
-                  zip -r ../goportscan-${os}-${arch}.zip .
-                  cd ../
+                  mkdir -p goportscan/src
+                  mv goportscan goportscan/src
+                  zip -r goportscan-${os}-${arch}.zip goportscan
 
             - name: Upload Release Assets
               uses: softprops/action-gh-release@v1
               with:
                   tag_name: ${{ github.ref }}
                   name: ${{ matrix.os }} Build
-                  file: goportscan-${{ matrix.os }}-amd64.zip
+                  files: goportscan-${{ matrix.os }}-amd64.zip
                   draft: false
                   prerelease: false

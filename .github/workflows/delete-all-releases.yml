@@ -1,0 +1,28 @@
+# Action to remove all releases from a repository
+
+name: Delete all releases
+
+on:
+    workflow_dispatch:
+
+jobs:
+    delete:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Install GitHub CLI
+              run: |
+                  sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+                  sudo apt-add-repository https://cli.github.com/packages
+                  sudo apt update
+                  sudo apt install gh
+
+            - name: Delete all releases
+              env:
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                  for tag in $(gh release list --repo ${{ github.repository }} | cut -f2); do
+                      gh release delete $tag --repo ${{ github.repository }} --yes
+                  done

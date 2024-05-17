@@ -34,6 +34,12 @@ jobs:
                   mv goportscan/goportscan goportscan/src
                   zip -r goportscan-${os}-${arch}.zip goportscan
 
+            - name: Setup GitHub Token
+              uses: actions/github-script@v5
+              with:
+                  script: |
+                      github.token = process.env.GITHUB_TOKEN
+
             - name: Upload Release Assets
               uses: softprops/action-gh-release@v1
               with:

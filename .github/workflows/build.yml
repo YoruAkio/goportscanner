@@ -34,10 +34,18 @@ jobs:
                   mv goportscan/goportscan goportscan/src
                   zip -r goportscan-${os}-${arch}.zip goportscan
 
+            - name: Create Tag
+              id: create_tag
+              run: |
+                  TAG_NAME=$(date +'%Y%m%d%H%M%S')-release
+                  git tag $TAG_NAME
+                  echo "::set-output name=tag_name::$TAG_NAME"
+              shell: bash
+
             - name: Upload Release Assets
               uses: softprops/action-gh-release@v1
               with:
-                  tag_name: ${{ github.ref }}
+                  tag_name: ${{ steps.create_tag.outputs.tag_name }}
                   name: ${{ matrix.os }} ${{ matrix.arch }} Build
                   files: goportscan-${{ matrix.os }}-${{ matrix.arch }}.zip
                   draft: false

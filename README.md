@@ -5,6 +5,7 @@
 **Features**
 
 -   **Cross-Platform:** Runs on various operating systems like Linux, macOS, and Windows.
+-   **Platform Support:** The tool can be run on Linux, Windows, and macOS. It also supports both 32-bit and 64-bit machines.
 -   **Concurrent Scanning:** Improves performance for large port ranges by utilizing multiple goroutines.
 -   **Timeout Control:** Limits the connection attempt duration for each port.
 -   **Flexible Port Range:** Supports single ports, comma-separated lists, or port ranges using a hyphen (-).

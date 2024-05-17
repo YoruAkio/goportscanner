@@ -39,6 +39,6 @@ jobs:
               with:
                   tag_name: ${{ github.ref }}
                   name: ${{ matrix.os }} Build
-                  file: goportscan-${{ matrix.os }}-amd64.zip # Explicitly mention arch
+                  file: goportscan-${{ matrix.os }}-amd64.zip
                   draft: false
                   prerelease: false

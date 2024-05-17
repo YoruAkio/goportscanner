@@ -27,10 +27,10 @@ jobs:
                   go build -o goportscan/goportscan
                   os=${{ matrix.os }}
                   arch=${{ matrix.arch }}
-                  mkdir -p portscan/src
-                  mv * portscan/src
-                  mv portscan/goportscan portscan/
-                  zip -r goportscan-${os}-${arch}.zip portscan
+                  mkdir -p goportscan/src
+                  mv * goportscan/src
+                  mv goportscan/src/goportscan goportscan/
+                  zip -r goportscan-${os}-${arch}.zip goportscan
               shell: bash
 
             - name: Upload Artifacts

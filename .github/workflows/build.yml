@@ -11,6 +11,7 @@ jobs:
         strategy:
             matrix:
                 os: [darwin, linux, windows]
+                arch: [386, amd64]
         steps:
             - uses: actions/checkout@v2
 
@@ -19,20 +20,16 @@ jobs:
               with:
                   go-version: 1.22.3
 
-            - name: Build for ${{ matrix.os }}
+            - name: Build for ${{ matrix.os }} ${{ matrix.arch }}
               run: |
                   GOOS=${{ matrix.os }}
-                  GOARCH=amd64  # Assuming amd64 architecture
-                  # Ensure `cmd/goportscan` exists (adjust path if needed)
-                  if [ ! -d "cmd/goportscan" ]; then
-                      go mod download  # Download dependencies if missing
-                  fi
-                  go build -o goportscan ./cmd/goportscan
+                  GOARCH=${{ matrix.arch }}
+                  go build -o goportscan
 
-            - name: Create archive for ${{ matrix.os }}
+            - name: Create archive for ${{ matrix.os }} ${{ matrix.arch }}
               run: |
                   os=${{ matrix.os }}
-                  arch=amd64  # Assuming amd64 architecture for all OSes
+                  arch=${{ matrix.arch }}
                   mkdir -p goportscan/src
                   mv goportscan goportscan/src
                   zip -r goportscan-${os}-${arch}.zip goportscan
@@ -41,7 +38,7 @@ jobs:
               uses: softprops/action-gh-release@v1
               with:
                   tag_name: ${{ github.ref }}
-                  name: ${{ matrix.os }} Build
-                  files: goportscan-${{ matrix.os }}-amd64.zip
+                  name: ${{ matrix.os }} ${{ matrix.arch }} Build
+                  files: goportscan-${{ matrix.os }}-${{ matrix.arch }}.zip
                   draft: false
                   prerelease: false

@@ -24,14 +24,14 @@ jobs:
               run: |
                   GOOS=${{ matrix.os }}
                   GOARCH=${{ matrix.arch }}
-                  go build -o goportscan
+                  go build -o goportscan/goportscan
 
             - name: Create archive for ${{ matrix.os }} ${{ matrix.arch }}
               run: |
                   os=${{ matrix.os }}
                   arch=${{ matrix.arch }}
                   mkdir -p goportscan/src
-                  mv goportscan goportscan/src
+                  mv goportscan/goportscan goportscan/src
                   zip -r goportscan-${os}-${arch}.zip goportscan
 
             - name: Upload Release Assets

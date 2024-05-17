@@ -20,19 +20,26 @@ jobs:
               with:
                   go-version: 1.22.3
 
-            - name: Build for ${{ matrix.os }} ${{ matrix.arch }}
+            - name: Build and Archive
               run: |
                   GOOS=${{ matrix.os }}
                   GOARCH=${{ matrix.arch }}
                   go build -o goportscan/goportscan
-
-            - name: Create archive for ${{ matrix.os }} ${{ matrix.arch }}
-              run: |
                   os=${{ matrix.os }}
                   arch=${{ matrix.arch }}
                   mkdir -p goportscan/src
                   mv goportscan/goportscan goportscan/src
                   zip -r goportscan-${os}-${arch}.zip goportscan
+              shell: bash
+
+        outputs:
+            matrix: ${{ toJSON(matrix) }}
+
+    release:
+        needs: build
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
 
             - name: Create Tag
               id: create_tag
@@ -47,7 +54,13 @@ jobs:
               with:
                   tag_name: ${{ steps.create_tag.outputs.tag_name }}
                   name: GoPortScan Release
-                  files: goportscan-${{ matrix.os }}-${{ matrix.arch }}.zip
+                  files: |
+                      goportscan-darwin-386.zip
+                      goportscan-darwin-amd64.zip
+                      goportscan-linux-386.zip
+                      goportscan-linux-amd64.zip
+                      goportscan-windows-386.zip
+                      goportscan-windows-amd64.zip
                   draft: false
                   prerelease: false
               env:

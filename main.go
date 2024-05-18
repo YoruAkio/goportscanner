@@ -13,15 +13,15 @@ import (
 )
 
 var (
-	host  = flag.String("host", "localhost", "Host or IP to scan")
+	host    = flag.String("host", "localhost", "Host or IP to scan")
 	timeout = flag.Duration("timeout", 1*time.Second, "Timeout per port")
-	ports  = flag.String("range", "80,443", "Port ranges e.g. 80,443,200-1000,8000-9000")
-	threads = flag.Int("threads", 100, "Threads to use")
+	ports   = flag.String("range", "80,443", "Port ranges e.g. 80,443,200-1000,8000-9000")
+	threads = flag.Int("threads", 200, "Threads to use")
 	showErrs = flag.Bool("verbose", false, "Show errors for failed ports")
 )
 
 func processRange(ctx context.Context, r string) chan int {
-	c := make(chan int)
+	c := make(chan int, *threads)
 	done := ctx.Done()
 	go func() {
 		defer close(c)
@@ -61,7 +61,7 @@ func processRange(ctx context.Context, r string) chan int {
 }
 
 func scanPorts(ctx context.Context, in <-chan int) chan string {
-	out := make(chan string, 10) // Limit output channel capacity
+	out := make(chan string, *threads)
 	done := ctx.Done()
 	var wg sync.WaitGroup
 	wg.Add(*threads)
@@ -76,7 +76,7 @@ func scanPorts(ctx context.Context, in <-chan int) chan string {
 					}
 					s := scanPort(port)
 					select {
-					case out <- s: // Wait for space in output channel before sending
+					case out <- s:
 					case <-done:
 						return
 					}

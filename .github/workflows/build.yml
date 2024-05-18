@@ -11,7 +11,7 @@ jobs:
         strategy:
             matrix:
                 os: [darwin, linux, windows]
-                arch: [386, amd64]
+                arch: [amd64]
         steps:
             - uses: actions/checkout@v2
 
@@ -27,7 +27,7 @@ jobs:
                   GOARCH=${{ matrix.arch }}
                   EXT=""
                   if [ "$GOOS" == "windows" ]; then
-                      EXT=".exe"
+                    EXT=".exe"
                   fi
                   go build -o goportscan/goportscan$EXT
                   os=${{ matrix.os }}
@@ -49,17 +49,13 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v2
-
             - name: Download Artifacts
               uses: actions/download-artifact@v2
 
             - name: Move Artifacts
               run: |
-                  mv goportscan-darwin-386/goportscan-darwin-386.zip .
                   mv goportscan-darwin-amd64/goportscan-darwin-amd64.zip .
-                  mv goportscan-linux-386/goportscan-linux-386.zip .
                   mv goportscan-linux-amd64/goportscan-linux-amd64.zip .
-                  mv goportscan-windows-386/goportscan-windows-386.zip .
                   mv goportscan-windows-amd64/goportscan-windows-amd64.zip .
 
             - name: Create Tag

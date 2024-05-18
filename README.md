@@ -27,7 +27,7 @@ The compiled binary is available in the [Releases](https://github.com/yoruakio/g
 1. Clone this repository:
 
 ```bash
-git clone [https://github.com/yoruakio/goportscan.git](https://github.com/yoruakio/goportscan.git)
+git clone https://github.com/yoruakio/goportscan.git
 ```
 
 2. Navigate to the project directory:

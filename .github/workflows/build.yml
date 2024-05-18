@@ -25,7 +25,11 @@ jobs:
                   mkdir -p goportscan
                   GOOS=${{ matrix.os }}
                   GOARCH=${{ matrix.arch }}
-                  go build -o goportscan/goportscan *.go
+                  EXT=""
+                  if [ "$GOOS" == "windows" ]; then
+                      EXT=".exe"
+                  fi
+                  go build -o goportscan/goportscan$EXT *.go
                   os=${{ matrix.os }}
                   arch=${{ matrix.arch }}
                   zip -r goportscan-${os}-${arch}.zip goportscan

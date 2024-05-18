@@ -12,6 +12,10 @@
 -   **Error Reporting:** Displays detailed error messages for failed connections (optional).
 -   **Clear Output:** Provides a concise output indicating open ports and any encountered errors.
 
+**Notes**
+
+The compiled binary is available in the [Releases](https://github.com/yoruakio/goportscan/releases) section for convenience. and The windows version are currently not be able run it right now, you can build it by yourself. I will fix it ASAP.
+
 **Getting Started**
 
 **Prerequisites**
@@ -79,10 +83,6 @@ Usage of ./goportscan:
 ```bash
 ./goportscan -host localhost -range 2000-3000 -verbose
 ```
-
-**Notes**
-
-The compiled binary is available in the [Releases](https://github.com/yoruakio/goportscan/releases) section for convenience.
 
 **Contributing**
 
